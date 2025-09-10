@@ -1,24 +1,39 @@
 /*
- * ESP32 Firebase IoT Project
+ * ESP32 Firebase IoT Project with WiFi Manager
  * Sends sensor data to Firebase Realtime Database
  * Compatible with Android app for real-time data synchronization
  * 
  * Required Libraries:
  * - Firebase ESP Client by mobizt
  * - ArduinoJson by Benoit Blanchon
+ * - WebServer (built-in ESP32)
+ * - EEPROM (built-in ESP32)
  * 
  * Instructions:
- * 1. Replace WIFI_SSID and WIFI_PASSWORD with your WiFi credentials
- * 2. Upload to ESP32 and open Serial Monitor at 115200 baud
+ * 1. Upload code to ESP32
+ * 2. ESP32 will create WiFi hotspot "ESP32-Setup"
+ * 3. Connect to hotspot and go to http://192.168.4.1
+ * 4. Enter your WiFi credentials
+ * 5. ESP32 will connect to your WiFi and start sending data to Firebase
  */
 
 #include <WiFi.h>
+#include <WebServer.h>
+#include <EEPROM.h>
 #include <Firebase_ESP_Client.h>
 #include <ArduinoJson.h>
 
-// WiFi Configuration - REPLACE WITH YOUR CREDENTIALS
-#define WIFI_SSID "YOUR_WIFI_SSID"
-#define WIFI_PASSWORD "YOUR_WIFI_PASSWORD"
+// WiFi Manager Configuration
+#define AP_SSID "ESP32-Setup"
+#define AP_PASSWORD "12345678"
+#define AP_IP IPAddress(192, 168, 4, 1)
+#define AP_GATEWAY IPAddress(192, 168, 4, 1)
+#define AP_SUBNET IPAddress(255, 255, 255, 0)
+
+// EEPROM addresses for storing WiFi credentials
+#define EEPROM_SIZE 512
+#define SSID_ADDR 0
+#define PASS_ADDR 32
 
 // Firebase Configuration - YOUR PROJECT DETAILS
 #define FIREBASE_HOST "https://esp32-wifi-firebase-38e64-default-rtdb.asia-southeast1.firebasedatabase.app"

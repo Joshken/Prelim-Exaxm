@@ -192,9 +192,9 @@ void sendToRealtimeDatabase() {
 // Callback function for token status
 void tokenStatusCallback(TokenInfo info) {
   if (info.status == token_status_error) {
-    Serial.printf("Token info: type = %s, status = %s\n", getTokenType(info).c_str(), getTokenStatus(info).c_str());
-    Serial.printf("Token error: %s\n", getTokenError(info).c_str());
+    Serial.println("Token status: ERROR");
+    Serial.printf("Token error: %s\n", info.error.message.c_str());
   } else {
-    Serial.printf("Token info: type = %s, status = %s\n", getTokenType(info).c_str(), getTokenStatus(info).c_str());
+    Serial.println("Token status: OK");
   }
 }
